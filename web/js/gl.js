@@ -412,9 +412,9 @@ const GLR = {
   gl: null, loc: {}, sources: new Map(), brushes: new Map(), luts: new Map(), depths: new Map(), curveKey: '', maxTex: 4096,
   init(canvas) {
     const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, preserveDrawingBuffer: true, premultipliedAlpha: false });
-    if (!gl) throw new Error('This app needs WebGL 2, which this browser or graphics driver does not provide.');
+    if (!gl || gl.isContextLost()) throw new Error('This app needs WebGL 2, which this browser or graphics driver does not provide.');
     this.gl = gl; this.canvas = canvas;
-    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error('Shader: ' + gl.getShaderInfoLog(s)); return s; };
+    const sh = (type, src) => { const s = gl.createShader(type); if (!s) throw new Error('This app needs WebGL 2, and the graphics driver did not let it start (the WebGL context was lost).'); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error('Shader: ' + gl.getShaderInfoLog(s)); return s; };
     const p = gl.createProgram();
     gl.attachShader(p, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, FRAG)); gl.linkProgram(p);
     if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error('Link: ' + gl.getProgramInfoLog(p));

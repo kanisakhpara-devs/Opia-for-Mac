@@ -2,6 +2,7 @@
 import json
 import mimetypes
 import os
+import socketserver
 import sys
 import traceback
 import urllib.parse
@@ -175,6 +176,12 @@ class Handler(BaseHTTPRequestHandler):
 class Server(ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = False
+
+    def server_bind(self):
+        # the standard version also looks up this computer's network name (socket.getfqdn), which macOS can treat as
+        # reaching into the local network and answer with an "Allow Opia to find devices on local networks?" prompt
+        socketserver.TCPServer.server_bind(self)
+        self.server_name, self.server_port = self.server_address[:2]
 
 
 def serve(port=0):

@@ -50,7 +50,10 @@ def self_test(window, home):
                   " menus: document.querySelectorAll('#menubar .mb').length, errors: window.__opiaErrors || [],"
                   " ua: navigator.userAgent, webgl2: !!document.createElement('canvas').getContext('webgl2'),"
                   " fatal: (document.querySelector('.fatal') || {}).innerText || null,"
-                  " toasts: [...document.querySelectorAll('#toasts > *')].map(t => t.innerText)})")
+                  " toasts: [...document.querySelectorAll('#toasts > *')].map(t => t.innerText),"
+                  " gl: (() => { const g = document.createElement('canvas').getContext('webgl2'); if (!g) return null;"
+                  "   const d = g.getExtension('WEBGL_debug_renderer_info');"
+                  "   return { lost: g.isContextLost(), shader: !!g.createShader(g.VERTEX_SHADER), renderer: d ? g.getParameter(d.UNMASKED_RENDERER_WEBGL) : g.getParameter(g.RENDERER) }; })()})")
         for _ in range(60):
             res = json.loads(window.evaluate_js(script) or '{}')
             out.update(res)
