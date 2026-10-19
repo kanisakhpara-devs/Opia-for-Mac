@@ -31,6 +31,24 @@ Work done in a cloud session (no Mac to hand) says so. Those changes were tested
   Only then does it publish `Opia-AppleSilicon.dmg`, `Opia-Intel.dmg` and the two zips the updater uses as release v0.1.N (Alpha).
 - **The README and website** are for the Mac. They cover which download to pick and macOS's **Open Anyway** step for an app that isn't notarised.
 
-**Tested here (Linux, headless Chromium pretending to be a Mac):** the page starts in Lens with no script errors. The menus show ⇧⌘I, ⇧⌘E, ⌘,, ⌘Z, ⌘[ and so on. The engine answers, and reports this repository for updates.
+**Tested here (Linux, headless Chromium pretending to be a Mac):** the page starts in Lens with no script errors. The menus show ⇧⌘I, ⇧⌘E, ⌘,, ⌘Z, ⌘[ and so on, also in Spanish. ⌘Z arrives as Ctrl+Z, and the delete key arrives as Delete. The engine answers, and reports this repository for updates.
 
-**Not tested:** anything by a person on a real Mac. That covers importing and editing photos, Groove recording, Motion export, the Trash, Finder, the trackpad pinch and the updater's swap.
+**Tested on GitHub's Macs:**
+- **Apple silicon:** Opia.app opened in a real window. Lens started on the Apple GPU (WebGL 2) with no script errors, and the first-run tour came up. The screenshot showed no permission prompts.
+- **Intel:** Opia.app builds and its engine answers. The window opens with its menus, but Lens can't start there: GitHub's Intel Macs are virtual machines whose WebGL is lost before Opia starts. A real Intel Mac has a graphics card, but this build hasn't been seen running Lens. The build shows a warning for this case and still publishes.
+
+**Fixed on the way, from what the builds showed:**
+- **OpenCV wouldn't load inside the app** ("recursion is detected during loading of cv2 binary extensions"). A small start-up hook (`tools/rthook_cv2.py`) now loads OpenCV's compiled module directly. Every OpenCV function Opia uses is in it.
+- **macOS asked "Allow Opia to find devices on local networks?"** The engine's web server looked up the computer's network name when it started. It no longer does, and the prompt didn't come back.
+- **"Opia could not start" showed only a stack in Safari's engine**, which leaves the message out. It now shows the message first.
+- **If WebGL is lost**, Opia says it needs WebGL 2, instead of failing inside the graphics code.
+
+**First release:** v0.1.5 (Alpha), with `Opia-AppleSilicon.dmg` (149 MB), `Opia-Intel.dmg` (146 MB) and the two zips the updater uses.
+
+**Not tested:** anything by a person on a real Mac. That covers:
+- importing and editing photos;
+- Groove recording and Motion export;
+- the Trash and Finder;
+- the trackpad pinch;
+- the Open Anyway step;
+- the updater's swap, since there was nothing older to update from yet.

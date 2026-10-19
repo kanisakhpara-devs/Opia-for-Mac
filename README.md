@@ -28,7 +28,7 @@
 
 **Opia for Mac** is the Mac version of [Opia for Windows](https://github.com/kanisakhpara-devs/Opia-for-Windows): a desktop app for the things you make, in five workspaces: **Lens** (a photo organiser and raw-style editor), **Imagine** (a layered picture editor), **Motion** (a video editor), **Groove** (a music studio) and **Folio** (a PDF editor). You switch between them with one click. Everything runs on your own computer: no account, no uploads, no subscription. A Python engine handles the files, catalogs, colour management and exports. The interface runs in the Mac's own WebKit and draws every photo edit on the graphics card (WebGL 2).
 
-> **Alpha, and not yet tried on a real Mac.** Every build is made on GitHub's Macs (Apple silicon and Intel), where it is opened in a real window and checked to start without errors before it is published. Nobody has used it on their own Mac yet. Please report problems as [issues](https://github.com/kanisakhpara-devs/Opia-for-Mac/issues), with a screenshot.
+> **Alpha, and not yet tried on a real Mac.** Every build is made on GitHub's Macs (Apple silicon and Intel). On Apple silicon it is opened in a real window and has to start in Lens without errors before it is published. GitHub's Intel Macs are virtual machines without working WebGL, so there only the engine and the window are checked. Nobody has used it on their own Mac yet. Please report problems as [issues](https://github.com/kanisakhpara-devs/Opia-for-Mac/issues), with a screenshot.
 
 Every workspace has a **Beginner** mode that shows the essentials in bigger controls, and an **Advanced** mode with every panel and tool. Opia also comes in four themes, in English and Spanish, and has trackpad-friendly controls: pinch to zoom, two fingers to pan.
 
@@ -293,7 +293,7 @@ What you add is drawn into the page, so it looks the same in every viewer, and i
 
 <br>
 
-- **Not tried on a real Mac yet.** Builds are checked on GitHub's Macs: the app starts, the window opens in Lens and there are no script errors. Importing, editing, Groove recording, Motion export and the updater haven't been used on a real Mac.
+- **Not tried on a real Mac yet.** Builds are checked on GitHub's Macs: the app starts, and on Apple silicon the window opens in Lens with no script errors. The Intel build hasn't been seen running Lens, because GitHub's Intel Macs have no working WebGL. Importing, editing, Groove recording, Motion export and the updater haven't been used on a real Mac.
 - **Not notarised by Apple**, so the first launch needs **Open Anyway** in System Settings (see [Get started](#-get-started)). Notarising needs a paid Apple Developer account.
 - **Two downloads**, one for Apple silicon and one for Intel, because some of the libraries Opia uses don't come as a single universal build.
 - **The window is Safari's engine (WebKit)**, where Opia for Windows uses Edge's. Opia was written and checked in Chromium, so some details may differ. Motion plays H.264, HEVC (iPhone video) and VP9 directly; MKV, Ogg and AV1 files get a preview copy first.
