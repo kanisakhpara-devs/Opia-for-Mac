@@ -118,6 +118,7 @@ jobs:
           if r.get('mac') != '1': problems.append('the Mac layer is not on')
           if r.get('errors'): problems.append('script errors: %s' % r['errors'])
           if r.get('error'): problems.append(r['error'])
+          if r.get('fatal'): problems.append('Opia could not start: %s' % r['fatal'])
           if problems: sys.exit('Window test failed: ' + '; '.join(problems))
           print('Window test passed')
           PY

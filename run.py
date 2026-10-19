@@ -48,11 +48,13 @@ def self_test(window, home):
         out['loaded'] = True
         script = ("JSON.stringify({module: typeof App !== 'undefined' ? App.module : null, mac: document.documentElement.dataset.mac || null,"
                   " menus: document.querySelectorAll('#menubar .mb').length, errors: window.__opiaErrors || [],"
-                  " ua: navigator.userAgent, webgl2: !!document.createElement('canvas').getContext('webgl2')})")
+                  " ua: navigator.userAgent, webgl2: !!document.createElement('canvas').getContext('webgl2'),"
+                  " fatal: (document.querySelector('.fatal') || {}).innerText || null,"
+                  " toasts: [...document.querySelectorAll('#toasts > *')].map(t => t.innerText)})")
         for _ in range(60):
             res = json.loads(window.evaluate_js(script) or '{}')
             out.update(res)
-            if res.get('module') or res.get('errors'):
+            if res.get('module') or res.get('errors') or res.get('fatal'):
                 break
             time.sleep(1)
         time.sleep(4)        # the screenshot is taken now, from outside

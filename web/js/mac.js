@@ -9,6 +9,8 @@
 
 window.__opiaErrors = [];
 addEventListener('error', e => { if (e.message) window.__opiaErrors.push(e.message + ' (' + String(e.filename || '').split('/').pop() + ':' + e.lineno + ')'); });
+addEventListener('unhandledrejection', e => window.__opiaErrors.push('promise: ' + String(e.reason && (e.reason.stack || e.reason.message) || e.reason)));
+{ const err = console.error.bind(console); console.error = (...a) => { window.__opiaErrors.push('console: ' + a.map(x => String(x && x.stack || x)).join(' ')); err(...a); }; }
 
 const Mac = {
   on: /Mac/.test(navigator.platform),
