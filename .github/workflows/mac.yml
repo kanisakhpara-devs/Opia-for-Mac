@@ -53,7 +53,7 @@ jobs:
         run: >
           python -m PyInstaller --noconfirm --windowed --name Opia --icon web/img/opia.png --osx-bundle-identifier io.github.kanisakhpara.opia
           --add-data "web:web" --add-data "models:models" --add-data "plugins:plugins" --add-data "server/build.json:server"
-          --hidden-import Foundation
+          --hidden-import Foundation --runtime-hook tools/rthook_cv2.py
           --collect-submodules PIL --collect-all webview --collect-all soundfile --collect-all _soundfile_data --collect-all pillow_heif
           --collect-all pypdfium2 --collect-all pypdfium2_raw --collect-submodules pypdf --collect-submodules cryptography --collect-all imageio_ffmpeg
           run.py
