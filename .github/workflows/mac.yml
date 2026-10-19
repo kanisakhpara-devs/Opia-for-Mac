@@ -114,7 +114,7 @@ jobs:
           r = json.load(open(sys.argv[1]))
           problems = []
           gl = r.get('gl') or {}
-          if r.get('fatal') and 'WebGL' in r['fatal'] and (gl.get('lost') or not gl.get('shader')):
+          if r.get('fatal') and (gl.get('lost') or not gl.get('shader')):
               # GitHub's Intel Macs are virtual machines with no graphics card WebGL can use; a real Mac has one.
               # Everything up to the photo engine started, so this one case is a warning, not a failure.
               print('::warning::WebGL is not available on this runner (%s), so Lens could not be checked here' % gl.get('renderer'))

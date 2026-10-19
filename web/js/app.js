@@ -203,6 +203,9 @@ function looksMenu(kind) {
   return kind === 'theme' ? themes : kind === 'lang' ? langs : [...themes, '-', ...langs];
 }
 
+/* the message and where it happened; Safari's stack leaves the message out, Chromium's starts with it */
+function errorText(e) { const msg = String(e), st = (e && e.stack) || ''; return st.includes(msg) ? st : msg + (st ? '\n\n' + st : ''); }
+
 async function start() {
   const t0 = performance.now();
   try {
@@ -229,6 +232,6 @@ async function start() {
     else setTimeout(() => Updates.boot(), wait + 2500);     // asks once about update checks; not during the first-run tour
     App.on('catalog', () => { Lib.cells.clear(); });
     if (!App.photos.size && !tour) UI.toast('Welcome. Use File > Import Photos, or open Local Disk in the left panel to add a folder.');
-  } catch (e) { console.error(e); $('#splash').classList.add('gone'); document.body.append(h('div', { class: 'fatal' }, h('h2', {}, 'Opia could not start'), h('pre', {}, String(e && e.stack || e)))); }
+  } catch (e) { console.error(e); $('#splash').classList.add('gone'); document.body.append(h('div', { class: 'fatal' }, h('h2', {}, 'Opia could not start'), h('pre', {}, errorText(e)))); }
 }
 start();
