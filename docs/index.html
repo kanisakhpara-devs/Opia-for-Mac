@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opia for Mac: make things, keep them yours</title>
+<meta name="description" content="Opia is a free desktop app with five workspaces: Lens for photos, Imagine for pictures, Motion for video, Groove for music and Folio for PDFs. Everything stays on your computer.">
+<meta property="og:title" content="Opia for Mac">
+<meta property="og:description" content="Make things. Keep them yours. Photos, pictures, video, music and PDFs in one desktop app.">
+<meta property="og:image" content="readme/banner.png">
+<meta name="theme-color" content="#efe8da">
+<link rel="icon" href="assets/opia-icon.svg">
+<link rel="preload" href="assets/Caveat.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="site.css">
+<script>/* hide what animates in only when the script can show it again; keep the visitor's theme from the first paint */
+document.documentElement.classList.add('js'); try { if (localStorage.getItem('opia-site-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}</script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+
+<header class="top">
+  <a class="brand" href="#top" aria-label="Opia for Mac, back to the top"><img src="assets/opia-icon.svg" alt="" width="28" height="28"><span>opia</span></a>
+  <nav class="links" aria-label="Sections">
+    <a href="#workspaces" data-i18n="nav.ws">Workspaces</a>
+    <a href="#private" data-i18n="nav.private">Privacy</a>
+    <a href="#new" data-i18n="nav.new">What's new</a>
+    <a href="#faq" data-i18n="nav.faq">FAQ</a>
+  </nav>
+  <div class="controls">
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="es" aria-pressed="false">ES</button>
+    </div>
+    <button type="button" class="theme" aria-label="Switch to the dark theme"><span class="sun" aria-hidden="true">☀</span><span class="moon" aria-hidden="true">☾</span></button>
+    <a class="pill" href="#download" data-i18n="nav.download">Download</a>
+  </div>
+</header>
+
+<main id="main">
+  <!-- the desk -->
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <p class="kicker plain" data-i18n="hero.k">Opia for Mac</p>
+      <h1 data-i18n="hero.title">Make things.<br>Keep them yours<span class="dot" aria-hidden="true"></span></h1>
+      <p class="sub" data-i18n="hero.sub">Opia is one desktop app for your photos, pictures, videos, songs and PDFs. No account, no cloud: it all stays on your desk.</p>
+      <div class="cta">
+        <a class="pill ink big" href="#download" data-i18n="hero.download">Download for Mac</a>
+        <a class="pill big" href="https://github.com/kanisakhpara-devs/Opia-for-Mac" data-i18n="hero.github">View on GitHub</a>
+      </div>
+      <p class="note hand write" data-i18n="hero.note">↓ five workspaces, one app</p>
+    </div>
+    <div class="desk" aria-hidden="true">
+      <figure class="print drop" style="--r:-5deg; --d:0"><span class="tape"></span><img src="readme/photos.png" alt="" width="1600" height="960"><figcaption class="hand" data-i18n="hero.c1">Lens · the whole trip, sorted</figcaption></figure>
+      <figure class="print drop" style="--r:4deg; --d:1"><span class="tape" style="--t:6deg"></span><img src="readme/image.png" alt="" width="1600" height="960"><figcaption class="hand" data-i18n="hero.c2">Imagine · title card</figcaption></figure>
+      <figure class="print drop" style="--r:2deg; --d:2"><span class="tape" style="--t:-8deg"></span><img src="readme/video.png" alt="" width="1600" height="960"><figcaption class="hand" data-i18n="hero.c3">Motion · 28 seconds of Iceland</figcaption></figure>
+      <figure class="print drop" style="--r:-7deg; --d:3"><span class="tape"></span><img src="readme/music.png" alt="" width="1600" height="960"><figcaption class="hand" data-i18n="hero.c4">Groove · a soundtrack for it</figcaption></figure>
+      <img class="sticker drop" src="assets/opia-music-icon.svg" alt="" style="--r:-12deg; --d:4">
+      <img class="sticker drop" src="assets/opia-pdf-icon.svg" alt="" style="--r:14deg; --d:5">
+    </div>
+  </section>
+
+  <!-- contents -->
+  <nav class="index" id="workspaces" aria-label="Workspaces">
+    <a href="#lens" style="--c:#3d5afe"><small>01</small>Lens<span data-i18n="ix.1">photos</span></a>
+    <a href="#imagine" style="--c:#8a4fe0"><small>02</small>Imagine<span data-i18n="ix.2">pictures</span></a>
+    <a href="#motion" style="--c:#c27800"><small>03</small>Motion<span data-i18n="ix.3">video</span></a>
+    <a href="#groove" style="--c:#c4381d"><small>04</small>Groove<span data-i18n="ix.4">music</span></a>
+    <a href="#folio" style="--c:#0f75b0"><small>05</small>Folio<span data-i18n="ix.5">PDFs</span></a>
+  </nav>
+
+  <!-- the five spreads -->
+  <section class="spread" id="lens" aria-labelledby="h-lens">
+    <div class="num" aria-hidden="true">01</div>
+    <div class="words">
+      <p class="kicker"><img src="assets/opia-icon.svg" alt="" width="26" height="26"><span data-i18n="lens.k">Lens · photos</span></p>
+      <h2 id="h-lens" data-i18n="lens.h">Every photo, sorted and developed.</h2>
+      <p data-i18n="lens.p">Rate, flag and label. Find faces, places and look-alikes. Then develop: tone, colour, curves, masks and healing. Your originals are never changed.</p>
+      <ul>
+        <li data-i18n="lens.1">Library, Develop, Map, Book</li>
+        <li data-i18n="lens.2">Slideshow, Print, Web gallery</li>
+        <li data-i18n="lens.3">Export to JPEG, TIFF, WebP, AVIF</li>
+      </ul>
+      <p class="margin hand write" data-i18n="lens.m">← the bit you'll use every day</p>
+    </div>
+    <figure class="print settle" style="--r:1.6deg"><span class="tape"></span><img src="readme/develop.png" alt="Lens, developing a sunset photo: exposure, contrast and vibrance raised" width="1600" height="960" loading="lazy"><figcaption class="hand" data-i18n="lens.c">sunset, +0.35 exposure</figcaption></figure>
+  </section>
+
+  <section class="spread flip" id="imagine" aria-labelledby="h-imagine">
+    <div class="num" aria-hidden="true">02</div>
+    <div class="words">
+      <p class="kicker"><img src="assets/opia-image-icon.svg" alt="" width="26" height="26"><span data-i18n="imagine.k">Imagine · pictures</span></p>
+      <h2 id="h-imagine" data-i18n="imagine.h">Layers, text and a brush.</h2>
+      <p data-i18n="imagine.p">A picture editor in the spirit of Photoshop. Stack layers with blend modes, cut things out, paint, and add text and shapes that stay editable.</p>
+      <ul>
+        <li data-i18n="imagine.1">Selections, magic wand, free transform</li>
+        <li data-i18n="imagine.2">Levels, curves, hue and saturation, live</li>
+        <li data-i18n="imagine.3">Open any photo from Lens with its edits</li>
+      </ul>
+      <p class="margin hand write" data-i18n="imagine.m">← three layers, still editable</p>
+    </div>
+    <figure class="print settle" style="--r:-1.4deg"><span class="tape" style="--t:5deg"></span><img src="readme/image.png" alt="Imagine, with a caption box and two editable text layers over a photo" width="1600" height="960" loading="lazy"><figcaption class="hand" data-i18n="imagine.c">ICELAND, in three layers</figcaption></figure>
+  </section>
+
+  <section class="spread" id="motion" aria-labelledby="h-motion">
+    <div class="num" aria-hidden="true">03</div>
+    <div class="words">
+      <p class="kicker"><img src="assets/opia-video-icon.svg" alt="" width="26" height="26"><span data-i18n="motion.k">Motion · video</span></p>
+      <h2 id="h-motion" data-i18n="motion.h">Cut it together. Export an MP4.</h2>
+      <p data-i18n="motion.p">Put clips, pictures, titles and music on a timeline. Trim, split, snap, fade and crossfade, then export a film that plays anywhere.</p>
+      <ul>
+        <li data-i18n="motion.1">Any number of video and audio tracks</li>
+        <li data-i18n="motion.2">Titles, crossfades, picture-in-picture</li>
+        <li data-i18n="motion.3">Selected photos to a video in one click</li>
+      </ul>
+      <p class="margin hand write" data-i18n="motion.m">← eight photos, one song</p>
+    </div>
+    <figure class="print settle" style="--r:1.2deg"><span class="tape" style="--t:-5deg"></span><img src="readme/video.png" alt="Motion, with a title over a photo and a timeline of photo clips and music" width="1600" height="960" loading="lazy"><figcaption class="hand" data-i18n="motion.c">rough cut, 0:28</figcaption></figure>
+  </section>
+
+  <section class="spread flip" id="groove" aria-labelledby="h-groove">
+    <div class="num" aria-hidden="true">04</div>
+    <div class="words">
+      <p class="kicker"><img src="assets/opia-music-icon.svg" alt="" width="26" height="26"><span data-i18n="groove.k">Groove · music</span></p>
+      <h2 id="h-groove" data-i18n="groove.h">Songs, even if you don't read music.</h2>
+      <p data-i18n="groove.p">Riffs for drums, bass, chords and melody that always fit together. Drag in your own sounds, record, cut and add effects when you want more.</p>
+      <ul>
+        <li data-i18n="groove.1">“Start me off” drafts a whole song</li>
+        <li data-i18n="groove.2">Ten real recorded instruments</li>
+        <li data-i18n="groove.3">Export WAV, MP3, stems or MIDI</li>
+      </ul>
+      <p class="margin hand write" data-i18n="groove.m">← it always stays in key</p>
+    </div>
+    <figure class="print settle" style="--r:-1.8deg"><span class="tape"></span><img src="readme/music.png" alt="Groove, with drums, bass, chords and melody riffs and an ambient audio track" width="1600" height="960" loading="lazy"><figcaption class="hand" data-i18n="groove.c">Lydian, 68 bpm, dreamy</figcaption></figure>
+  </section>
+
+  <section class="spread" id="folio" aria-labelledby="h-folio">
+    <div class="num" aria-hidden="true">05</div>
+    <div class="words">
+      <p class="kicker"><img src="assets/opia-pdf-icon.svg" alt="" width="26" height="26"><span data-i18n="folio.k">Folio · PDFs</span></p>
+      <h2 id="h-folio" data-i18n="folio.h">Fill it in, sign it, send it.</h2>
+      <p data-i18n="folio.p">Type anywhere on a PDF, highlight, tick, draw your signature once and place it. Reorder pages, and combine files and pictures into one.</p>
+      <ul>
+        <li data-i18n="folio.1">Real form fields and signatures</li>
+        <li data-i18n="folio.2">Split, rotate, extract and combine</li>
+        <li data-i18n="folio.3">Page numbers, watermarks, passwords</li>
+      </ul>
+      <p class="margin hand write" data-i18n="folio.m">← booked!</p>
+    </div>
+    <figure class="print settle" style="--r:1.5deg"><span class="tape" style="--t:7deg"></span><img src="readme/pdf.png" alt="Folio, with highlighted text, ticks and a handwritten-style note on an itinerary" width="1600" height="960" loading="lazy"><figcaption class="hand" data-i18n="folio.c">itinerary, signed off</figcaption></figure>
+  </section>
+
+  <!-- also in the box: a ticked list on ruled paper -->
+  <section class="sheet" aria-labelledby="h-box">
+    <p class="kicker plain" data-i18n="box.k">Also in the box</p>
+    <h2 id="h-box" data-i18n="box.h">Small things that make it nice to use.</h2>
+    <ul class="checklist">
+      <li class="tick-in"><b data-i18n="b1.t">Beginner and Advanced.</b> <span data-i18n="b1.p">Start with the essentials in bigger controls; switch on every panel when you're ready.</span></li>
+      <li class="tick-in"><b data-i18n="b2.t">Four themes.</b> <span data-i18n="b2.p">Opia Dark, Midnight Teal, Porcelain and Lilac Haze.</span></li>
+      <li class="tick-in"><b data-i18n="b3.t">English and Spanish.</b> <span data-i18n="b3.p">Change language any time, while the app is running.</span></li>
+      <li class="tick-in"><b data-i18n="b4.t">Keyboard friendly.</b> <span data-i18n="b4.p">Every button reachable with Tab, menus on F10, shortcuts you can change.</span></li>
+      <li class="tick-in"><b data-i18n="b5.t">Trackpad mode.</b> <span data-i18n="b5.p">Two fingers pan, a pinch zooms, sliders get bigger.</span></li>
+      <li class="tick-in"><b data-i18n="b6.t">Plug-ins.</b> <span data-i18n="b6.p">Add your own commands in Python.</span></li>
+    </ul>
+  </section>
+
+  <!-- privacy: a rubber stamp -->
+  <section class="private" id="private" aria-labelledby="h-private">
+    <div class="stamp" aria-hidden="true"><svg viewBox="0 0 200 200"><defs><path id="ring" d="M100 100 m-74 0 a74 74 0 1 1 148 0 a74 74 0 1 1 -148 0"/></defs><circle cx="100" cy="100" r="92" class="s1"/><circle cx="100" cy="100" r="58" class="s2"/><text><textPath href="#ring" data-i18n="st.ring">KEPT ON THIS COMPUTER · KEPT ON THIS COMPUTER · </textPath></text><circle cx="100" cy="100" r="24" class="s3"/><circle cx="108" cy="92" r="8" class="s4"/></svg></div>
+    <div class="words">
+      <p class="kicker plain" data-i18n="p.k">Private by design</p>
+      <h2 id="h-private" data-i18n="p.h">Your files never leave your desk.</h2>
+      <p data-i18n="p.p">Opia has no account and no cloud. Photos, songs, videos and documents stay in your own folders, and the originals are never changed. It only goes online for map tiles, for FTP uploads you start yourself, and to check for updates once you've allowed it.</p>
+      <p class="margin hand write" data-i18n="p.m">no sign-up · no subscription · works offline</p>
+    </div>
+  </section>
+
+  <!-- what's new: a pinned memo -->
+  <section class="memo-wrap" id="new" aria-labelledby="h-new">
+    <div class="memo settle" style="--r:-1deg">
+      <span class="pin" aria-hidden="true"></span>
+      <h2 id="h-new" class="hand" data-i18n="n.h">What's new</h2>
+      <ol>
+        <li><b>Opia for Android</b> <span data-i18n="n6">Lens, Imagine, Folio and Groove on your phone, made for touch. <a href="https://kanisakhpara-devs.github.io/Opia-for-Android/">Have a look →</a></span></li>
+        <li><b>Imagine</b> <span data-i18n="n1">a layered picture editor, with selections, text, adjustments and filters.</span></li>
+        <li><b>Motion</b> <span data-i18n="n2">a timeline video editor with titles and crossfades that exports MP4.</span></li>
+        <li><b>Groove</b> <span data-i18n="n3">drop sound files on the timeline where you want them; drag clips between tracks.</span></li>
+        <li><b data-i18n="n4.t">Accessibility</b> <span data-i18n="n4">keyboard access to everything, screen reader names, stronger contrast.</span></li>
+        <li><b data-i18n="n5.t">New names</b> <span data-i18n="n5">Lens, Imagine, Motion, Groove and Folio.</span></li>
+      </ol>
+      <a class="hand more" href="https://github.com/kanisakhpara-devs/Opia-for-Mac/blob/main/CHANGELOG.md" data-i18n="n.more">the full changelog →</a>
+    </div>
+  </section>
+
+  <!-- FAQ on ruled lines -->
+  <section class="faq" id="faq" aria-labelledby="h-faq">
+    <p class="kicker plain">FAQ</p>
+    <h2 id="h-faq" data-i18n="q.h">Questions, answered honestly.</h2>
+    <div class="qs">
+      <details><summary data-i18n="q1">Is it free?</summary><p data-i18n="a1">Yes. There is nothing to pay and no account to make. The project hasn't chosen an open-source licence yet, so for now the code is shared to look at and run, not to reuse.</p></details>
+      <details><summary data-i18n="q2">Does it work offline?</summary><p data-i18n="a2">Yes. Everything runs on your computer. Only the map in Lens needs the internet, to fetch map tiles.</p></details>
+      <details><summary data-i18n="q3">Which computers does it run on?</summary><p data-i18n="a3">Macs with Apple silicon (M1 and later) and Macs with Intel processors; there's a download for each. It's an alpha: every build is opened and checked on GitHub's Macs, but it hasn't been tried on many real ones yet. For Windows there's <a href="https://kanisakhpara-devs.github.io/Opia-for-Windows/">Opia for Windows</a>.</p></details>
+      <details><summary data-i18n="q4">Can it open my Lightroom catalog?</summary><p data-i18n="a4">No. Lens has its own catalog format. It reads XMP sidecar files, so ratings, keywords and edits saved that way come across.</p></details>
+      <details><summary data-i18n="q5">Will it change my original files?</summary><p data-i18n="a5">No. Edits are stored separately, and Imagine, Motion and Folio save new files. Your originals are only overwritten if you choose to save over them.</p></details>
+      <details><summary data-i18n="q6">What can't it do?</summary><p data-i18n="a6">Photo editing is 8-bit, Imagine has no PSD support or layer masks, Motion has no speed changes or keyframes, and Folio can't rewrite existing PDF text or read scans. The README lists every limit.</p></details>
+    </div>
+  </section>
+
+  <!-- download: a ticket -->
+  <section class="download" id="download" aria-labelledby="h-dl">
+    <div class="ticket settle" style="--r:.6deg">
+      <div class="stub" aria-hidden="true"><img src="assets/opia-icon.svg" alt="" width="70" height="70"><span>ADMIT ONE</span></div>
+      <div class="main">
+        <h2 id="h-dl" data-i18n="d.h">Get Opia for Mac</h2>
+        <p data-i18n="d.p">Free, for Macs with Apple silicon or Intel.</p>
+        <a class="pill ink big" href="https://github.com/kanisakhpara-devs/Opia-for-Mac/releases/latest/download/Opia-AppleSilicon.dmg" data-i18n="d.btn">Download for Apple silicon</a>
+        <a class="pill big" href="https://github.com/kanisakhpara-devs/Opia-for-Mac/releases/latest/download/Opia-Intel.dmg" data-i18n="d.btn2">Download for Intel Macs</a>
+        <p class="small" data-i18n="d.note">Not sure which? Apple menu › About This Mac says "Chip: Apple M…" or "Processor: …Intel…". Open the .dmg and drag Opia to Applications. Opia isn't notarised by Apple, so the first time macOS stops it: click <b>Done</b>, open <b>System Settings › Privacy &amp; Security</b>, click <b>Open Anyway</b>, then open Opia again. After that, Help › Check for Updates keeps it current. On Windows? <a href="https://kanisakhpara-devs.github.io/Opia-for-Windows/">Opia for Windows</a>. On a phone? <a href="https://kanisakhpara-devs.github.io/Opia-for-Android/">Opia for Android</a>.</p>
+        <div class="code"><pre tabindex="0" aria-label="Commands to run Opia from source"><code>git clone https://github.com/kanisakhpara-devs/Opia-for-Mac
+cd Opia-for-Mac
+pip3 install -r requirements.txt
+python3 run.py</code></pre><button type="button" class="copy" data-i18n="d.copy">Copy</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="colophon">
+    <div><a class="brand" href="#top"><img src="assets/opia-icon.svg" alt="" width="24" height="24"><span>opia</span></a><p data-i18n="ft.p">Opia for Mac. Make things. Keep them yours.</p><p class="help"><span data-i18n="ft.help">Need help? Message us on WhatsApp:</span> <a href="https://wa.me/918450973767" style="white-space:nowrap">+91 8450973767</a><br><span data-i18n="ft.help2">Messages are preferred; calls may not be answered.</span></p></div>
+    <div class="flinks"><a href="https://github.com/kanisakhpara-devs/Opia-for-Mac">GitHub</a><a href="https://github.com/kanisakhpara-devs/Opia-for-Mac#readme">README</a><a href="https://github.com/kanisakhpara-devs/Opia-for-Mac/blob/main/CHANGELOG.md" data-i18n="ft.changelog">Changelog</a><a href="https://github.com/kanisakhpara-devs/Opia-for-Mac/releases" data-i18n="ft.releases">Releases</a><a href="https://kanisakhpara-devs.github.io/Opia-for-Windows/">Opia for Windows</a><a href="https://kanisakhpara-devs.github.io/Opia-for-Android/">Opia for Android</a></div>
+    <div class="credits">
+      <p data-i18n="ft.c1">Motion uses FFmpeg from the imageio-ffmpeg package (BSD-2-Clause). The ffmpeg program inside it is usually a GPL build; if you pass the app on with it inside, the GPL applies to that part.</p>
+      <p data-i18n="ft.c2">Instrument samples: Fluid R3 GM SoundFont, CC BY 3.0. Typefaces: Nunito and Caveat, SIL Open Font License. PDF tools: pypdf and pypdfium2.</p>
+      <p data-i18n="ft.c3">The pictures in the screenshots were generated for this page; they aren't real photos.</p>
+    </div>
+  </div>
+</footer>
+<script src="site.js"></script>
+</body>
+</html>

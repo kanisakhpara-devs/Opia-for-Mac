@@ -1,0 +1,160 @@
+'use strict';
+/* Hover help: rest the pointer on the name of an editing control, section, panel or tool and a card says what it does.
+   Anything carrying data-tip gets one; sliders look theirs up here by settings key (or by label). */
+
+const TIPS = {
+  key: {
+    temp: 'Makes the whole photo warmer (more yellow) or cooler (more blue). Use it to fix light that looks too orange or too blue.',
+    tint: 'Shifts colour between green and magenta. Use it with Temp to remove a colour cast.',
+    exposure: 'Overall brightness, like opening or closing the lens. Affects the whole photo, mid-tones most of all.',
+    contrast: 'The gap between light and dark. More contrast adds punch; less gives a softer, flatter look.',
+    highlights: 'Brightens or darkens only the bright areas. Pull it down to bring back detail in skies and bright skin.',
+    shadows: 'Brightens or darkens only the dark areas. Push it up to see into the shadows.',
+    whites: 'Sets how bright the very brightest point is. Raise it until the photo has a clean white.',
+    blacks: 'Sets how dark the very darkest point is. Lower it for deeper, richer blacks.',
+    texture: 'Brings out or smooths fine surface detail such as skin, bark or fabric, without changing the overall contrast.',
+    clarity: 'Adds contrast to the mid-tones so edges look crisper. Lower it for a soft, dreamy look.',
+    dehaze: 'Cuts through haze, fog or flat light. Negative values add a misty feel.',
+    vibrance: 'Boosts the duller colours more than the already strong ones, and goes easy on skin tones.',
+    saturation: 'Makes every colour stronger or weaker by the same amount. All the way down gives black and white.',
+    sharpAmount: 'How strongly edges are sharpened. Zero turns sharpening off.',
+    sharpRadius: 'How wide the sharpened edge is. Small for fine detail, larger for soft or coarse subjects.',
+    sharpDetail: 'How much of the finest texture gets sharpened. High values also sharpen noise.',
+    sharpMasking: 'Limits sharpening to real edges so smooth areas like sky and skin stay clean.',
+    nrLum: 'Smooths the speckled grey grain you get in dim light or at high ISO. Too much makes the photo look waxy.',
+    nrLumDetail: 'How much fine detail to protect while smoothing grain.',
+    nrLumContrast: 'How much local contrast to keep while smoothing grain.',
+    nrColor: 'Removes the coloured speckles (red, green, blue dots) that appear in dark areas.',
+    nrColorDetail: 'Protects thin coloured edges while removing colour speckles.',
+    nrColorSmooth: 'Evens out larger blotches of wrong colour left in the shadows.',
+    lensDistScale: 'How much of the lens profile’s distortion fix to apply.',
+    lensVigScale: 'How much of the lens profile’s corner-brightening to apply.',
+    distortion: 'Straightens lines that bulge outwards or pinch inwards because of the lens.',
+    caR: 'Removes red or cyan colour fringes along high-contrast edges.',
+    caB: 'Removes blue or yellow colour fringes along high-contrast edges.',
+    defringePurple: 'Removes purple halos around bright edges, such as branches against the sky.',
+    defringeGreen: 'Removes green halos around bright edges.',
+    lensVignette: 'Brightens or darkens the corners to cancel the darkening a lens causes.',
+    lensVigMid: 'How far in from the corners the lens vignette correction reaches.',
+    vigAmount: 'Darkens (negative) or lightens (positive) the edges of the photo to draw the eye to the middle.',
+    vigMid: 'How far the vignette reaches in towards the centre.',
+    vigRound: 'The shape of the vignette, from a rounded rectangle to a circle.',
+    vigFeather: 'How soft the edge of the vignette is.',
+    vigHighlights: 'Lets bright spots near the edges shine through a dark vignette.',
+    grain: 'Adds film-style grain for texture or a vintage look.',
+    grainSize: 'How large the grain particles are. Larger grain softens the photo slightly.',
+    grainRough: 'How even the grain is. Higher values look rougher and more irregular.',
+    calShadowTint: 'Removes a green or magenta cast from the shadows only.',
+    calRedHue: 'Shifts what the camera treats as pure red, which moves every colour that contains red.',
+    calRedSat: 'How intense the camera’s red is across the whole photo.',
+    calGreenHue: 'Shifts what the camera treats as pure green.',
+    calGreenSat: 'How intense the camera’s green is across the whole photo.',
+    calBlueHue: 'Shifts what the camera treats as pure blue.',
+    calBlueSat: 'How intense the camera’s blue is across the whole photo. A popular way to add colour depth.',
+    pcHighlights: 'Bends the top of the curve: brightens or darkens the brightest tones.',
+    pcLights: 'Bends the upper middle of the curve: the lighter mid-tones.',
+    pcDarks: 'Bends the lower middle of the curve: the darker mid-tones.',
+    pcShadows: 'Bends the bottom of the curve: the darkest tones.',
+    'pcSplit.0': 'Where the shadows region of the curve ends.',
+    'pcSplit.1': 'The dividing point between darks and lights.',
+    'pcSplit.2': 'Where the highlights region of the curve begins.',
+    tVertical: 'Tilts the photo backwards or forwards to stop tall things appearing to lean.',
+    tHorizontal: 'Swings the photo left or right to correct shooting from an angle.',
+    tRotate: 'Turns the photo slightly to level it.',
+    tAspect: 'Stretches the photo wider or taller to undo squashing from other corrections.',
+    tScale: 'Zooms the photo in or out inside the frame, to hide empty corners.',
+    tX: 'Slides the photo left or right inside the frame.',
+    tY: 'Slides the photo up or down inside the frame.',
+  },
+  label: {
+    Lum: 'Makes this tonal range lighter or darker along with its colour tint.',
+    Blending: 'How much the shadow, mid-tone and highlight tints overlap. Higher is smoother.',
+    Balance: 'Shifts the split between shadows and highlights, so one tint covers more of the photo.',
+    Angle: 'Rotates the crop to straighten a tilted horizon.',
+  },
+  hsl: {
+    hue: n => `Shifts the ${n.toLowerCase()} tones towards a neighbouring colour.`,
+    sat: n => `Makes the ${n.toLowerCase()} tones more vivid or more muted, leaving other colours alone.`,
+    lum: n => `Makes the ${n.toLowerCase()} tones lighter or darker.`,
+    bw: n => `How bright the ${n.toLowerCase()} tones become once the photo is black and white.`,
+  },
+  section: {
+    Presence: 'Detail and colour strength: texture, clarity, haze, and how vivid the colours are.',
+    Tone: 'The brightness of the photo, from the darkest blacks to the brightest whites. Auto makes a sensible first guess.',
+    Sharpening: 'Makes edges crisper. Zoom to 100% to judge it.',
+    'Noise Reduction': 'Smooths the grain and colour speckles that appear in dim light.',
+    Profile: 'Automatic fixes for the known flaws of a particular lens.',
+    Manual: 'Hand-set lens fixes, for when there is no profile.',
+    Defringe: 'Removes purple and green halos around bright edges.',
+    Vignetting: 'Evens out corners that the lens left darker than the centre.',
+    Upright: 'Automatically straightens buildings and horizons.',
+    Transform: 'Corrects perspective by hand: tilt, swing, rotate and reposition.',
+    'Post-Crop Vignetting': 'Darkens or lightens the edges of the finished, cropped photo for effect.',
+    Grain: 'Adds film-style grain.',
+    Hue: 'Shift individual colours towards their neighbours, e.g. make greens more yellow.',
+    Saturation: 'Make individual colours stronger or weaker.',
+    Luminance: 'Make individual colours lighter or darker, e.g. a darker blue sky.',
+    Region: 'Shape the curve with four sliders, one for each band of brightness.',
+    'Split Points': 'Where one brightness band ends and the next begins.',
+    'Red Primary': 'Redefines the camera’s red, which shifts every colour containing red.',
+    'Green Primary': 'Redefines the camera’s green.',
+    'Blue Primary': 'Redefines the camera’s blue.',
+  },
+  panel: {
+    dbasic: 'The essential edits: white balance, brightness, contrast and colour strength. Start here.',
+    dcurve: 'Fine control of brightness and contrast by reshaping a curve from shadows to highlights.',
+    dhsl: 'Change one colour at a time: its hue, its strength and its brightness. Also the black-and-white mix.',
+    dcg: 'Tint the shadows, mid-tones and highlights with different colours for a mood, like warm highlights and cool shadows.',
+    ddetail: 'Sharpening and noise reduction.',
+    dlens: 'Fixes for lens flaws: distortion, colour fringes and dark corners.',
+    dtrans: 'Straighten leaning buildings and fix perspective.',
+    dfx: 'Finishing touches: a vignette around the edges and film grain.',
+    dcal: 'Advanced colour tuning of how the camera’s red, green and blue are interpreted.',
+    dhisto: 'A graph of the photo’s tones, dark on the left and bright on the right. Piled up against either side means lost detail.',
+    dproof: 'Previews how the photo will look when printed or shown on another kind of screen.',
+    dpre: 'One-click looks. Hover to preview, click to apply; you can still adjust everything afterwards.',
+    dsnap: 'Saved versions of this photo’s edits that you can return to at any time.',
+    dhist: 'Every edit made to this photo, in order. Click a step to go back to it.',
+    dnav: 'A small overview of the photo. Drag in it to move around when zoomed in.',
+    Navigator: 'A preview of the selected photo.',
+    Catalog: 'Quick views of everything: all photos, your Quick Collection and the last import.',
+    Folders: 'The folders on disk that hold your photos. Click one to see just its photos.',
+    disk: 'Browse this computer and add a folder of photos to the catalog.',
+    dates: 'Your photos by the year and month they were taken. Click the arrow beside a year to open its months.',
+    Collections: 'Albums you build yourself. A photo can be in many collections without being copied.',
+    Histogram: 'A graph of the photo’s tones, dark on the left and bright on the right.',
+    'Quick Develop': 'Fast adjustments without leaving the Library. They apply to every selected photo.',
+    Keywording: 'Words that describe the selected photos, so you can find them later.',
+    'Keyword List': 'Every keyword in the catalog. Tick one to add it to the selected photos.',
+    Metadata: 'Details stored with the photo: title, caption, camera settings, date and place.',
+  },
+  tool: {
+    crop: ['Crop & Straighten', 'Trim the edges, change the shape and level a tilted horizon.  Shortcut: R'],
+    spot: ['Heal', 'Paint over dust spots, blemishes or small distractions to remove them.  Shortcut: Q'],
+    redeye: ['Red Eye', 'Click a red pupil from a flash photo to turn it dark again.'],
+    mask: ['Masking', 'Edit only part of the photo, using a brush or a gradient.  Shortcuts: K, M, Shift+M'],
+  },
+};
+
+const Tip = {
+  el: null, timer: 0, on: null,
+  init() {
+    this.el = h('div', { id: 'tip' }); document.body.append(this.el);
+    addEventListener('mouseover', e => { const t = e.target.closest && e.target.closest('[data-tip]'); if (t === this.on) return; this.hide(); if (t) { this.on = t; this.timer = setTimeout(() => this.show(t), 350); } });
+    for (const ev of ['mousedown', 'wheel', 'keydown']) addEventListener(ev, () => this.hide(), true);
+    addEventListener('scroll', () => this.hide(), true);
+  },
+  hide() { clearTimeout(this.timer); this.on = null; this.el.classList.remove('on'); },
+  show(t) {
+    if (!t.isConnected) return;
+    const name = t.dataset.tipName || t.textContent.trim(), el = this.el, r = t.getBoundingClientRect();
+    el.replaceChildren(h('b', {}, name), h('span', {}, t.dataset.tip), t.dataset.tipReset ? h('i', {}, 'Double-click the name to reset.') : null);
+    const side = t.closest('.side'), box = side ? side.getBoundingClientRect() : r, w = el.offsetWidth, hh = el.offsetHeight;
+    // beside the panel the control lives in, so it never covers the control itself; otherwise just below
+    let x = side ? (box.left > innerWidth / 2 ? box.left - w - 10 : box.right + 10) : r.left, y = side ? r.top + r.height / 2 - hh / 2 : r.bottom + 8;
+    if (x < 8 || x + w > innerWidth - 8) { x = clamp(r.left, 8, innerWidth - w - 8); y = r.bottom + 8; }
+    Object.assign(el.style, { left: x + 'px', top: clamp(y, 8, innerHeight - hh - 8) + 'px' });
+    el.classList.add('on');
+  },
+};
+Tip.init();

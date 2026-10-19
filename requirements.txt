@@ -1,0 +1,13 @@
+# What Opia for Windows needs to run from source: pip install -r requirements.txt
+Pillow
+numpy
+opencv-python-headless
+rawpy
+exifread
+soundfile
+pywebview
+pillow-heif
+pypdf
+pypdfium2
+cryptography
+imageio-ffmpeg

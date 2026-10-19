@@ -1,0 +1,9 @@
+{
+ "id": "opia.export-manifest",
+ "name": "Export Manifest",
+ "version": "1.0",
+ "author": "Opia",
+ "description": "After every export, writes manifest.csv into the export folder listing each file with its size and SHA-256 checksum.",
+ "entry": "plugin.py",
+ "commands": []
+}

@@ -1,0 +1,14 @@
+{
+ "id": "opia.contact-sheet",
+ "name": "Contact Sheet",
+ "version": "1.0",
+ "author": "Opia",
+ "description": "Builds a JPEG contact sheet of the selected photos with file names, saved to the Opia folder under Contact Sheets.",
+ "entry": "plugin.py",
+ "commands": [
+  {
+   "id": "sheet",
+   "title": "Make Contact Sheet"
+  }
+ ]
+}

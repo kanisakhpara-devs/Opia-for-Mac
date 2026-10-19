@@ -1,0 +1,171 @@
+# Builds Opia.app on Apple silicon and on Intel, opens each one for real to check it works, and publishes both as a release
+# (v0.1.<run>). The app's updater downloads the zip for its chip from there; people download the .dmg. The newest is always at
+# https://github.com/kanisakhpara-devs/Opia-for-Mac/releases/latest/download/Opia-AppleSilicon.dmg (or Opia-Intel.dmg)
+name: Mac
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mac
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            chip: AppleSilicon
+          - runner: macos-15-intel
+            chip: Intel
+    runs-on: ${{ matrix.runner }}
+    env:
+      VERSION: 0.1.${{ github.run_number }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install what Opia needs
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pyinstaller
+          python -c "import platform, webview, cv2, rawpy, soundfile, pillow_heif, pypdfium2, imageio_ffmpeg; print(platform.machine(), 'ok')"
+
+      - name: Stamp the version
+        run: |
+          echo "{\"version\": \"$VERSION\", \"commit\": \"$GITHUB_SHA\"}" > server/build.json
+          cat server/build.json
+
+      - name: Build Opia.app
+        run: >
+          python -m PyInstaller --noconfirm --windowed --name Opia --icon web/img/opia.png --osx-bundle-identifier io.github.kanisakhpara.opia
+          --add-data "web:web" --add-data "models:models" --add-data "plugins:plugins" --add-data "server/build.json:server"
+          --hidden-import Foundation
+          --collect-submodules PIL --collect-all webview --collect-all soundfile --collect-all _soundfile_data --collect-all pillow_heif
+          --collect-all pypdfium2 --collect-all pypdfium2_raw --collect-submodules pypdf --collect-submodules cryptography --collect-all imageio_ffmpeg
+          run.py
+
+      # the version, and the sentences macOS shows when Opia first asks for the microphone, the camera or a folder
+      - name: Fill in Info.plist and sign
+        run: |
+          P=dist/Opia.app/Contents/Info.plist
+          set_key() { /usr/libexec/PlistBuddy -c "Delete :$1" "$P" 2>/dev/null || true; /usr/libexec/PlistBuddy -c "Add :$1 $2 $3" "$P"; }
+          set_key CFBundleShortVersionString string "$VERSION"
+          set_key CFBundleVersion string "$VERSION"
+          set_key CFBundleDisplayName string "Opia"
+          set_key NSHighResolutionCapable bool true
+          set_key LSApplicationCategoryType string "public.app-category.photography"
+          set_key NSMicrophoneUsageDescription string "Groove and Motion record your voice or instrument from the microphone."
+          set_key NSCameraUsageDescription string "Tethered capture can take photos from a webcam or connected camera."
+          set_key NSDesktopFolderUsageDescription string "Opia opens and saves the photos, pictures, videos, songs and PDFs you choose."
+          set_key NSDocumentsFolderUsageDescription string "Opia opens and saves the photos, pictures, videos, songs and PDFs you choose."
+          set_key NSDownloadsFolderUsageDescription string "Opia opens and saves the photos, pictures, videos, songs and PDFs you choose."
+          set_key NSRemovableVolumesUsageDescription string "Opia imports photos from memory cards and other disks."
+          plutil -lint "$P"
+          # an ad-hoc signature: free, and what Apple silicon needs before it runs anything. It isn't Apple-notarised,
+          # so the first time, macOS asks people to allow Opia in System Settings > Privacy & Security
+          codesign --force --deep --sign - dist/Opia.app
+          codesign --verify --deep --strict --verbose=2 dist/Opia.app
+          du -sh dist/Opia.app
+
+      # the engine starts and answers
+      - name: Smoke test
+        run: |
+          dist/Opia.app/Contents/MacOS/Opia --no-window --port 8765 --home "$RUNNER_TEMP/opia-home" &
+          pid=$!
+          ok=
+          for i in $(seq 60); do
+            sleep 2
+            if curl -sf -X POST http://127.0.0.1:8765/api/update_settings -H 'Content-Type: application/json' -d '{}'; then ok=1; break; fi
+          done
+          kill $pid || true
+          [ -n "$ok" ] || { echo "Opia.app did not start"; exit 1; }
+
+      # the real window opens, the page starts in Lens with no script errors, and a screenshot is kept
+      - name: Window test
+        run: |
+          H="$RUNNER_TEMP/opia-gui"; mkdir -p "$H"
+          OPIA_SELFTEST=1 dist/Opia.app/Contents/MacOS/Opia --home "$H" > "$RUNNER_TEMP/gui.log" 2>&1 &
+          pid=$!
+          for i in $(seq 90); do
+            sleep 2
+            [ -f "$H/self-test.json" ] && break
+            screencapture -x "$RUNNER_TEMP/window.png" 2>/dev/null || true
+          done
+          sleep 3; kill $pid 2>/dev/null || true
+          cat "$RUNNER_TEMP/gui.log" | tail -20
+          [ -f "$H/self-test.json" ] || { echo "The window test did not finish"; exit 1; }
+          cat "$H/self-test.json"
+          python - "$H/self-test.json" <<'PY'
+          import json, sys
+          r = json.load(open(sys.argv[1]))
+          problems = []
+          if not r.get('loaded'): problems.append('the page never loaded')
+          if r.get('module') != 'library': problems.append('Lens did not start (module: %r)' % r.get('module'))
+          if r.get('mac') != '1': problems.append('the Mac layer is not on')
+          if r.get('errors'): problems.append('script errors: %s' % r['errors'])
+          if r.get('error'): problems.append(r['error'])
+          if problems: sys.exit('Window test failed: ' + '; '.join(problems))
+          print('Window test passed')
+          PY
+
+      - name: Keep the screenshot
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/window.png" ]; then
+            sips -Z 900 -s format jpeg -s formatOptions 60 "$RUNNER_TEMP/window.png" --out "$RUNNER_TEMP/window.jpg" >/dev/null
+            echo "----- screenshot (base64 jpeg) -----"; base64 -i "$RUNNER_TEMP/window.jpg"; echo "----- end -----"
+          fi
+
+      - name: Package
+        run: |
+          ditto -c -k --keepParent dist/Opia.app "Opia-Mac-${{ matrix.chip }}.zip"
+          mkdir dmg && cp -R dist/Opia.app dmg/ && ln -s /Applications dmg/Applications
+          hdiutil create -volname "Opia" -srcfolder dmg -ov -format UDZO "Opia-${{ matrix.chip }}.dmg"
+          ls -la *.zip *.dmg
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Opia-mac-${{ matrix.chip }}
+          path: |
+            Opia-Mac-${{ matrix.chip }}.zip
+            Opia-${{ matrix.chip }}.dmg
+
+  release:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # the history since the last release becomes its notes
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: 0.1.${{ github.run_number }}
+        run: |
+          ls -la out
+          # the notes are what changed since the last release, one line per change: the app's updater shows them
+          prev=$(git describe --tags --abbrev=0 --match 'v0.*' HEAD^ 2>/dev/null || true)
+          if [ -n "$prev" ]; then notes=$(git log --no-merges --format='- %s' "$prev"..HEAD); else notes=$(git log -1 --format='- %s'); fi
+          gh release create "v$VERSION" out/* --target "$GITHUB_SHA" --latest \
+            --title "Opia for Mac $VERSION (Alpha)" --notes "$notes"
